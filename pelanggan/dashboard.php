@@ -1,5 +1,6 @@
 <?php
 session_start();
+// var_dump($_SESSION);
 if ($_SESSION['nama_pelanggan'] !== null) {
     include '../conn.php';
     $title = "Dashboard Pelanggan";
@@ -24,6 +25,7 @@ if ($_SESSION['nama_pelanggan'] !== null) {
         $kodetransaksi = "$id_pelanggan" . date("Ymd") . $jumlahdatacheckpesanan;
         $_SESSION['kodetransaksi'] = $kodetransaksi;
         $querycheckkeranjang = "SELECT * FROM detail_pesanan WHERE id_pelanggan = $id_pelanggan AND id_kandang = $id_kandang AND checkout = 0";
+        // var_dump($querycheckkeranjang);
         $execcheckkeranjang = mysqli_query($conn, $querycheckkeranjang);
         $jumlahdatacheck = mysqli_num_rows($execcheckkeranjang);
         $datacheck = mysqli_fetch_array($execcheckkeranjang, MYSQLI_ASSOC);
@@ -33,11 +35,16 @@ if ($_SESSION['nama_pelanggan'] !== null) {
         } else {
             $queryaddtocart = "INSERT INTO detail_pesanan VALUES(null, $kodetransaksi, $id_pelanggan, $id_kandang, 1, 0)";
         }
-        // var_dump($queryaddtocart);
-        // die();
+        $querykeranjang = "SELECT * FROM detail_pesanan JOIN pelanggan ON detail_pesanan.id_pelanggan = pelanggan.id_pelanggan WHERE pelanggan.id_pelanggan = $id_pelanggan AND checkout = 0";
+        $execkeranjang = mysqli_query($conn, $querykeranjang);
+        if ($execkeranjang) {
+            $jumlahkeranjang = mysqli_num_rows($execkeranjang);
+            $_SESSION['datakeranjang'] = $jumlahkeranjang;
+        }
         $exec = mysqli_query($conn, $queryaddtocart);
-        // header("location:dashboard.php?pesan=berhasil");
+        header("location:dashboard.php?pesan=berhasil");
     }
+
     $querykeranjang = "SELECT * FROM detail_pesanan JOIN pelanggan ON detail_pesanan.id_pelanggan = pelanggan.id_pelanggan WHERE pelanggan.id_pelanggan = $id_pelanggan AND checkout = 0";
     $execkeranjang = mysqli_query($conn, $querykeranjang);
     if ($execkeranjang) {

@@ -2,7 +2,7 @@
 session_start();
 if ($_SESSION['nama_petugas'] !== null) {
   include '../conn.php';
-  $querypesanan = "SELECT  * FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan WHERE pesanan.status_pesanan = 'proses'";
+  $querypesanan = "SELECT  * FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan WHERE pesanan.status_pesanan = 'proses' OR pesanan.status_pesanan = 'jeruji' OR pesanan.status_pesanan = 'rangka' OR pesanan.status_pesanan = 'perangkaian' OR pesanan.status_pesanan = 'finishing'";
   $execpesanan = mysqli_query($conn, $querypesanan);
   $title = "Pesanan Sedang Proses";
   $id = $_SESSION['id_petugas'];

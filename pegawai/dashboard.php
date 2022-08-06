@@ -3,7 +3,7 @@ session_start();
 if ($_SESSION['nama_petugas'] !== null) {
     include '../conn.php';
     $title = "Dashboard Petugas";
-    $querypesananproses = "SELECT * FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan WHERE pesanan.status_pesanan = 'proses'";
+    $querypesananproses = "SELECT * FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan WHERE pesanan.status_pesanan = 'proses' OR pesanan.status_pesanan = 'jeruji' OR pesanan.status_pesanan = 'rangka' OR pesanan.status_pesanan = 'perangkaian' OR pesanan.status_pesanan = 'finishing'";
     $querypesananselesai = "SELECT * FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan WHERE pesanan.status_pesanan = 'selesai'";
     $querypesanansiap = "SELECT * FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan WHERE pesanan.status_pesanan = 'siapkirim'";
     if (isset($_GET['proses']) && isset($_GET['kode'])) {
@@ -151,7 +151,7 @@ if ($_SESSION['nama_petugas'] !== null) {
                                                             <td>
                                                                 <?= $datapesananproses[$i]['kode_transaksi'] ?>
                                                             </td>
-                                                            <td><a class="btn btn-info" href="?proses=<?= $datapesananproses[$i]['id_pesanan'] ?>&kode=<?= $datapesananproses[$i]['kode_transaksi']; ?>">UPDATE</a></td>
+                                                            <td><a class="btn btn-info" href="?proses=<?= $datapesananproses[$i]['id_pesanan'] ?>&kode=<?= $datapesananproses[$i]['kode_transaksi']; ?>"><?= strtoupper($datapesananproses[$i]['status_pesanan']) ?></a></td>
                                                         </tr>
                                                     <?php } ?>
                                                 <?php else : ?>
@@ -246,9 +246,10 @@ if ($_SESSION['nama_petugas'] !== null) {
                                     </div>
                                 </div>
                                 <div class="col-md-4 mt-4">
-                                    <?php if ($d['foto_kandang']) : ?>
-                                        <img height="150px" alt="Foto Kandang" src="../assets/img/foto-kandang/<?= $d['foto_kandang'] ?>">
-                                    <?php endif ?>
+                                    <?php if (isset($d['foto_pembayaran'])) { ?>
+                                        <img height="150px" alt="Foto Kandang" data-bs-toggle="modal" data-bs-target="#fotopembayaran" src="../assets/img/foto-pembayaran/<?= $d['foto_pembayaran'] ?>">
+                                    <?php } ?>
+                                    <img height="150px" alt="Foto Kandang" src="../assets/img/foto-kandang/<?= $d['foto_kandang'] ?>">
                                 </div>
                             <?php endforeach ?>
                             <?php if ($datadetailpesanan[0]['status_pesanan'] == 'selesai') { ?>
@@ -275,9 +276,31 @@ if ($_SESSION['nama_petugas'] !== null) {
                                 </div>
                             <?php } else { ?>
                                 <div class="d-flex justify-content-center mt-5">
-                                    <div class="col-4 m-2">
-                                        <a class="form-control btn-info text-center text-decoration-none" href="?update=siapkirim&kode=<?= $datadetailpesanan[0]['kode_transaksi'] ?>">Update Siap Kirim</a>
-                                    </div>
+                                    <?php if ($datadetailpesanan[0]['status_pesanan'] == 'proses') { ?>
+                                        <div class="col-4 m-2">
+                                            <a class="form-control btn-warning text-center text-decoration-none" href="?update=jeruji&kode=<?= $datadetailpesanan[0]['kode_transaksi'] ?>">Update Pembuatan Jeruji</a>
+                                        </div>
+                                    <?php } ?>
+                                    <?php if ($datadetailpesanan[0]['status_pesanan'] == 'jeruji') { ?>
+                                        <div class="col-4 m-2">
+                                            <a class="form-control btn-warning text-center text-decoration-none" href="?update=rangka&kode=<?= $datadetailpesanan[0]['kode_transaksi'] ?>">Update Pembuatan Rangka</a>
+                                        </div>
+                                    <?php } ?>
+                                    <?php if ($datadetailpesanan[0]['status_pesanan'] == 'rangka') { ?>
+                                        <div class="col-4 m-2">
+                                            <a class="form-control btn-warning text-center text-decoration-none" href="?update=perangkaian&kode=<?= $datadetailpesanan[0]['kode_transaksi'] ?>">Update Proses Perangkaian</a>
+                                        </div>
+                                    <?php } ?>
+                                    <?php if ($datadetailpesanan[0]['status_pesanan'] == 'perangkaian') { ?>
+                                        <div class="col-4 m-2">
+                                            <a class="form-control btn-warning text-center text-decoration-none" href="?update=finishing&kode=<?= $datadetailpesanan[0]['kode_transaksi'] ?>">Update Proses Finishing</a>
+                                        </div>
+                                    <?php } ?>
+                                    <?php if ($datadetailpesanan[0]['status_pesanan'] == 'finishing') { ?>
+                                        <div class="col-4 m-2">
+                                            <a class="form-control btn-warning text-center text-decoration-none" href="?update=siapkirim&kode=<?= $datadetailpesanan[0]['kode_transaksi'] ?>">Update Siap Kirim</a>
+                                        </div>
+                                    <?php } ?>
                                     <div class="col-4 m-2">
                                         <?php $textpesan = "Bpk/Ibu " . $datadetailpesanan[0]['nama_pelanggan'] . " Pesanana Anda Sudah Mulai Kami Proses. \n Tertanda\n Admin"; ?>
                                         <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan</a>
@@ -286,6 +309,20 @@ if ($_SESSION['nama_petugas'] !== null) {
                             <?php } ?>
                         </div>
                     <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="fotopembayaran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <!-- <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+                    <div class="modal-body">
+                        <div class="col-12 align_middle text-center">
+                            <img alt="Foto Kandang" src="../assets/img/foto-pembayaran/<?= $d['foto_pembayaran'] ?>">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -11,9 +11,10 @@
     if (!in_array($ext, $ekstensi)) {
       header("location:pesanansiap?pesan=gagal_ekstensi");
     } else {
-      if ($ukuran < 1044070) {
+      if ($ukuran < 10044070) {
         $xx = $rand . '_' . $filename;
-        move_uploaded_file($_FILES['foto-kandang']['tmp_name'], "../assets/img/foto-pembayaran/" . $xx);
+        move_uploaded_file($_FILES['foto-pembayaran']['tmp_name'], "../assets/img/foto-pembayaran/" . $xx);
+        // move_uploaded_file($_FILES['foto-pembayaran']['tmp_name'], "" . $xx);
         if (mysqli_query($conn, "UPDATE pesanan SET foto_pembayaran = '$xx' WHERE kode_transaksi = '$kodetransaksi'")) {
           header("location:pesanansiap.php?pesan=berhasil");
         } else {

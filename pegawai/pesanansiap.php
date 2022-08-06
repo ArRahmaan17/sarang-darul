@@ -135,7 +135,13 @@ if ($_SESSION['nama_petugas'] !== null) {
                     <div class="col-md-6">Model Kandang: <?= $d['nama_kandang'] ?></div>
                   </div>
                 </div>
+
                 <div class="col-md-4 mt-4">
+                  <?php // $d['foto_pembayaran'] 
+                  ?>
+                  <?php if (isset($d['foto_pembayaran'])) { ?>
+                    <img height="150px" alt="Foto Kandang" data-bs-toggle="modal" data-bs-target="#fotopembayaran" src="../assets/img/foto-pembayaran/<?= $d['foto_pembayaran'] ?>">
+                  <?php } ?>
                   <img height="150px" alt="Foto Kandang" src="../assets/img/foto-kandang/<?= $d['foto_kandang'] ?>">
                 </div>
               <?php endforeach ?>
@@ -156,6 +162,20 @@ if ($_SESSION['nama_petugas'] !== null) {
           <?php else : ?>
             <h1> <?= $pesan; ?> </h1>
           <?php endif ?>
+        </div>
+      </div>
+      <div class="modal fade" id="fotopembayaran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <!-- <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+            <div class="modal-body">
+              <div class="col-12 align_middle text-center">
+                <img alt="Foto Kandang" src="../assets/img/foto-pembayaran/<?= $d['foto_pembayaran'] ?>">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Bootstrap core JS-->

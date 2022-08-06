@@ -174,9 +174,12 @@ if (isset($_POST['cari'])) {
                                     <?php if (isset($_POST['cari'])) { ?>
                                         <div class="laporan ">
                                             <tr>
+                                                <td>Total Pesanan</td>
+                                                <td>:</td>
+                                                <td><b><?= $jumlahpesanan ?></b>, </td>
                                                 <td>Pendapatan Total</td>
                                                 <td>:</td>
-                                                <td>Rp.<?= $pendapattotal ?></td>
+                                                <td>Rp.<?= number_format($pendapattotal, 2, ".", ",") ?></td>
                                             </tr>
                                         </div>
                                     <?php } ?>

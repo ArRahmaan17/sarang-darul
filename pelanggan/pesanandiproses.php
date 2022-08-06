@@ -17,11 +17,12 @@ if ($_SESSION['nama_pelanggan'] !== null) {
     }
     $kodetransaksi = $_GET['detailpesanan'];
     $querydetail = "SELECT * FROM pesanan JOIN detail_pesanan ON pesanan.kode_transaksi = detail_pesanan.kode_transaksi JOIN pelanggan ON detail_pesanan.id_pelanggan = pelanggan.id_pelanggan JOIN kandang ON detail_pesanan.id_kandang = kandang.id_kandang WHERE pesanan.kode_transaksi = '$kodetransaksi'";
+    // var_dump($querydetail);
     $execdetail = mysqli_query($conn, $querydetail);
     $datadetail = mysqli_fetch_all($execdetail, MYSQLI_ASSOC);
   }
 
-  $querypesanan = "SELECT * FROM pesanan JOIN pelanggan ON pesanan.id_pelanggan = pelanggan.id_pelanggan WHERE pesanan.status_pesanan = 'proses' AND pesanan.id_pelanggan = $id";
+  $querypesanan = "SELECT * FROM pesanan JOIN pelanggan ON pesanan.id_pelanggan = pelanggan.id_pelanggan WHERE pesanan.status_pesanan = 'proses' OR pesanan.status_pesanan = 'jeruji' OR pesanan.status_pesanan = 'rangka' OR pesanan.status_pesanan = 'perangkaian' OR pesanan.status_pesanan = 'finishing' AND pesanan.id_pelanggan = $id";
   $exec = mysqli_query($conn, $querypesanan);
   if ($exec) {
     $jumlahdata = mysqli_num_rows($exec);

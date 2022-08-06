@@ -19,6 +19,7 @@ if ($_SESSION['nama_pelanggan'] !== null) {
     $querydetail = "SELECT * FROM pesanan JOIN detail_pesanan ON pesanan.kode_transaksi = detail_pesanan.kode_transaksi JOIN pelanggan ON detail_pesanan.id_pelanggan = pelanggan.id_pelanggan JOIN kandang ON detail_pesanan.id_kandang = kandang.id_kandang WHERE pesanan.kode_transaksi = '$kodetransaksi'";
     $execdetail = mysqli_query($conn, $querydetail);
     $datadetail = mysqli_fetch_all($execdetail, MYSQLI_ASSOC);
+    // var_dump($querydetail);
   }
 
   $querypesanan = "SELECT * FROM pesanan JOIN pelanggan ON pesanan.id_pelanggan = pelanggan.id_pelanggan WHERE pesanan.status_pesanan = 'siapkirim' AND pesanan.id_pelanggan = $id";
