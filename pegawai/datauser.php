@@ -180,16 +180,16 @@ if ($_SESSION['nama_petugas'] !== null) {
                             <?php if ($datadetailpesanan[0]['status_pesanan'] == 'selesai') { ?>
                                 <div class="d-flex mt-5">
                                     <div class="col-6 m-2">
-                                        <a class="form-control btn-info text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>">Cetak</a>
+                                        <a class="form-control btn-info text-center text-decoration-none" target="blank" href="https://wa.me/62<?= $d['nomer_pelanggan'] ?>">Cetak</a>
                                     </div>
                                     <div class="col-6 m-2">
-                                        <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>">Hubungi Pelanggan</a>
+                                        <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/62<?= $d['nomer_pelanggan'] ?>">Hubungi Pelanggan</a>
                                     </div>
                                 </div>
                             <?php } else { ?>
                                 <?php $textpesan = "Bpk/Ibu " . $datadetailpesanan[0]['nama_pelanggan'] . " Pesanana Anda Sudah Mulai Kami Proses. \n Tertanda\n Admin"; ?>
                                 <div class="col-12 my-2">
-                                    <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan</a>
+                                    <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/62<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan</a>
                                 </div>
                             <?php } ?>
                         </div>

@@ -138,7 +138,7 @@ if ($_SESSION['nama_petugas'] !== null) {
                                     <a class="form-control btn-secondary text-center text-decoration-none" target="blank" href="../cetak.php?id=<?= $d['id_pelanggan'] ?>&kode=<?= $d['kode_transaksi'] ?>">Cetak</a>
                                 </div>
                                 <div class="col-6 m-2">
-                                    <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>">Hubungi Pelanggan</a>
+                                    <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/62<?= $d['nomer_pelanggan'] ?>">Hubungi Pelanggan</a>
                                 </div>
                             </div>
                         <?php else : ?>

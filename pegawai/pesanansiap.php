@@ -151,8 +151,8 @@ if ($_SESSION['nama_petugas'] !== null) {
                 </div>
                 <div class="col-4 m-2">
                   <?php $textpesan = "Bpk/Ibu " . $datadetail[0]['nama_pelanggan'] . " Pesanana Anda Sudah Siap Dikirim Mohon Untuk Melakukan Pembayaran." . "\r\n" . " Tertanda\n Admin"; ?>
-                  <!-- <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan Siap Kirim</a> -->
-                  <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/6289522983270?text=<?= $textpesan ?>">Hubungi Pelanggan Siap Kirim</a>
+                  <!-- <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/62<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan Siap Kirim</a> -->
+                  <!-- <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/6289522983270?text=<?= $textpesan ?>">Hubungi Pelanggan Siap Kirim</a> -->
                 </div>
               </div>
               <div class="col-12 m-2">

@@ -3,50 +3,82 @@ session_start();
 include '../conn.php';
 $title = "Laporan Penjualan";
 $querypesanan = "SELECT * FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan";
+$querydetail = "SELECT detail_pesanan.*, kandang.id_kandang, kandang.nama_kandang, kandang.harga_kandang FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan JOIN detail_pesanan ON detail_pesanan.kode_transaksi = pesanan.kode_transaksi JOIN kandang ON kandang.id_kandang = detail_pesanan.id_kandang";
 $execpesanan = mysqli_query($conn, $querypesanan);
+$execdetail = mysqli_query($conn, $querydetail);
 $jumlahpesanan = mysqli_num_rows($execpesanan);
 $pesan = "<td colspan='6' class='text-center'>Tidak Ada Data</td>";
 $datapesanan = '';
-if ($execpesanan) {
+if ($execpesanan && $execdetail) {
     $datapesanan = mysqli_fetch_all($execpesanan, MYSQLI_ASSOC);
+    $datadetail = mysqli_fetch_all($execdetail, MYSQLI_ASSOC);
+    $querydetailpesanan = "SELECT * FROM pesanan JOIN detail_pesanan ON detail_pesanan.kode_transaksi = pesanan.kode_transaksi JOIN kandang ON kandang.id_kandang = detail_pesanan.id_kandang WHERE detail_pesanan.checkout = 1";
+    $execdetailpesanan = mysqli_query($conn, $querydetailpesanan);
+    $datadetailpesanan = mysqli_fetch_all($execdetailpesanan, MYSQLI_ASSOC);
+    foreach ($datadetailpesanan as $data) {
+        $pendapatanan = 0;
+        $pendapatantotal[] = $pendapatanan += $data['jumlah_barang'] * $data['harga_kandang'];
+        $pendapattotal = 0;
+        foreach ($pendapatantotal as $total) {
+            $pendapattotal += $total;
+        }
+    }
 } else {
     $pesan = "<td colspan='6' class='text-center'>Belum Ada Pesanan Yang DiProses Nih</td>";
 }
 if (isset($_POST['cari'])) {
-    // var_dump($_POST);
+    unset($datapesanan);
+    unset($datadetail);
     $tanggalsekarang = date('Y-m-d');
     $queryfilter = "SELECT * FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan ";
+    $querydetail = "SELECT detail_pesanan.*, kandang.id_kandang, kandang.nama_kandang, kandang.harga_kandang FROM pesanan JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan JOIN detail_pesanan ON detail_pesanan.kode_transaksi = pesanan.kode_transaksi JOIN kandang ON kandang.id_kandang = detail_pesanan.id_kandang ";
     $tanggalawal = $_POST['tanggalawal'];
     $tanggalakhir = $_POST['tanggalakhir'];
     $kodetransaksi = $_POST['kodetranksaksi'];
+    $statuspesaan = $_POST['status_pesanan'];
+
     if ($_POST != '') {
         $queryfilter .= "WHERE ";
+        $querydetail .= "WHERE ";
         if (($tanggalawal and $tanggalakhir) != '') {
             $queryfilter .= " (tanggal_pesan BETWEEN '$tanggalawal' AND '$tanggalakhir') ";
+            $querydetail .= " (tanggal_pesan BETWEEN '$tanggalawal' AND '$tanggalakhir') ";
         } elseif ($kodetransaksi != '') {
             $queryfilter .= " kode_transaksi = '$kodetransaksi' ";
+            $querydetail .= " kode_transaksi = '$kodetransaksi' ";
+        } elseif ($statuspesaan != '' && $statuspesaan != 'Semua Pesanan') {
+            $queryfilter .= " status_pesanan = '$statuspesaan'";
+            $querydetail .= " status_pesanan = '$statuspesaan'";
         } else {
             $queryfilter .= "(tanggal_pesan BETWEEN '2010-01-01' AND '$tanggalsekarang') ";
+            $querydetail .= "(tanggal_pesan BETWEEN '2010-01-01' AND '$tanggalsekarang') ";
         }
     }
+
     $execfilter = mysqli_query($conn, $queryfilter);
+    $execdetail = mysqli_query($conn, $querydetail);
+
     $jumlahfilter = mysqli_num_rows($execfilter);
     if ($jumlahfilter > 0) {
         $jumlahpesanan = $jumlahfilter;
-        $datapesanan = mysqli_fetch_all($execfilter, MYSQLI_ASSOC);
         $print = "yes";
+        $datapesanan = mysqli_fetch_all($execfilter, MYSQLI_ASSOC);
+        $datadetail = mysqli_fetch_all($execdetail, MYSQLI_ASSOC);
         $querydetailpesanan = "SELECT * FROM pesanan JOIN detail_pesanan ON detail_pesanan.kode_transaksi = pesanan.kode_transaksi JOIN kandang ON kandang.id_kandang = detail_pesanan.id_kandang WHERE detail_pesanan.checkout = 1";
         $execdetailpesanan = mysqli_query($conn, $querydetailpesanan);
         $datadetailpesanan = mysqli_fetch_all($execdetailpesanan, MYSQLI_ASSOC);
-        foreach ($datadetailpesanan as $datadetail) {
+        foreach ($datadetailpesanan as $data) {
             $pendapatanan = 0;
-            $pendapatantotal[] = $pendapatanan += $datadetail['jumlah_barang'] * $datadetail['harga_kandang'];
+            $pendapatantotal[] = $pendapatanan += $data['jumlah_barang'] * $data['harga_kandang'];
             $pendapattotal = 0;
             foreach ($pendapatantotal as $total) {
                 $pendapattotal += $total;
             }
         }
     }
+    // var_dump($datapesanan);
+    // var_dump($datadetail);
+    // die();
 }
 ?>
 <?php if ($_SESSION['nama_petugas'] !== null) : ?>
@@ -136,7 +168,18 @@ if (isset($_POST['cari'])) {
                                         <input type="text" class="form-control" placeholder="masukan kode transaksi" name="kodetranksaksi" id="kodetransaksi" placeholder="Password">
                                     </div>
                                     <div class="col-auto">
-                                        <input type="submit" name="cari" value="Cari" class="btn btn-primary mb-3">
+                                        <select class="form-select" name="status_pesanan" aria-label="Default select example">
+                                            <option selected>Semua Pesanan</option>
+                                            <option value="jeruji">Pembuatan Jeruji</option>
+                                            <option value="2">Pembuatan Rangka</option>
+                                            <option value="3">Perangkaian</option>
+                                            <option value="4">Finishing</option>
+                                            <option value="5">Sipa Kirim</option>
+                                            <option value="6">Selesai</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="submit" name="cari" value="Cari Dan Cetak" class="btn btn-primary mb-3">
                                     </div>
                                 </form>
                             </div>
@@ -146,24 +189,37 @@ if (isset($_POST['cari'])) {
                                         <caption class="btn-warning text-center rounded disabled fw-bold">List Pesanan Kandang</caption>
                                         <thead class="table-dark">
                                             <tr>
-                                                <th scope="col">No</th>
+                                                <th>No</th>
                                                 <th scope="col">Nama Pelanggan</th>
-                                                <th scope="col">Kode Transaksi</th>
+                                                <th scope="col">Nama Kandang</th>
                                                 <th>Status Pesanan</th>
+                                                <th scope="col">Total Pembayaran</th>
                                             </tr>
                                         </thead>
                                         <tbody class="align-middle">
                                             <?php $no = 0 ?>
                                             <?php if (isset($datapesanan)) : ?>
                                                 <?php for ($i = 0; $i < $jumlahpesanan; $i++) { ?>
+
                                                     <?php $no++ ?>
                                                     <tr>
-                                                        <th scope="row"><?= $no ?></th>
-                                                        <td><?= $datapesanan[$i]['nama_pelanggan'] ?></td>
-                                                        <td>
-                                                            <?= $datapesanan[$i]['kode_transaksi'] ?>
+                                                        <td class="col"><?= $no ?></td>
+                                                        <td class="col"><?= $datapesanan[$i]['nama_pelanggan'] ?></td>
+                                                        <td class="col">
+                                                            <?php foreach ($datadetail as $key) {
+                                                                if ($datapesanan[$i]['kode_transaksi'] == $key['kode_transaksi']) { ?>
+                                                                    <?= "Model Kandang " . $key['nama_kandang'] . "<br>" ?>
+                                                            <?php }
+                                                            } ?>
                                                         </td>
-                                                        <td><?= $datapesanan[$i]['status_pesanan'] ?></td>
+                                                        <td class="col"><?= strtoupper(($datapesanan[$i]['status_pesanan'] == 'jeruji') ? 'Pembuatan Jeruji' : ($datapesanan[$i]['status_pesanan'] == 'rangka') ? 'Pembuatan Rangka' : $datapesanan[$i]['status_pesanan']) ?></td>
+                                                        <td class="col">
+                                                            <?php foreach ($datadetail as $key) {
+                                                                if ($datapesanan[$i]['kode_transaksi'] == $key['kode_transaksi']) {
+                                                                    echo number_format($key['jumlah_barang'] * $key['harga_kandang'], 2, ".", ",") . "<br>";
+                                                                } ?>
+                                                            <?php } ?>
+                                                        </td>
                                                     </tr>
                                                 <?php } ?>
                                             <?php else : ?>
@@ -171,18 +227,16 @@ if (isset($_POST['cari'])) {
                                             <?php endif ?>
                                         </tbody>
                                     </table>
-                                    <?php if (isset($_POST['cari'])) { ?>
-                                        <div class="laporan ">
-                                            <tr>
-                                                <td>Total Pesanan</td>
-                                                <td>:</td>
-                                                <td><b><?= $jumlahpesanan ?></b>, </td>
-                                                <td>Pendapatan Total</td>
-                                                <td>:</td>
-                                                <td>Rp.<?= number_format($pendapattotal, 2, ".", ",") ?></td>
-                                            </tr>
-                                        </div>
-                                    <?php } ?>
+                                    <div class="laporan">
+                                        <tr>
+                                            <td>Total Pesanan</td>
+                                            <td>:</td>
+                                            <td><b><?= $jumlahpesanan ?></b>, </td>
+                                            <td>Pendapatan Total</td>
+                                            <td>:</td>
+                                            <td>Rp.<?= number_format($pendapattotal, 2, ".", ",") ?></td>
+                                        </tr>
+                                    </div>
                                 </div>
                             </div>
                         </div>

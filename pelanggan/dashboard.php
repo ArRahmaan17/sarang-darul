@@ -146,7 +146,7 @@ if ($_SESSION['nama_pelanggan'] !== null) {
                                                         <div class="card-body">
                                                             <h5 class="card-title">Pesanan Kandang <?= $p['nama_kandang'] ?></h5>
                                                             <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                                            <p class="card-text"><small class="text-muted">Tanggal Pesan <?= $p['tanggal_pesan'] ?> Status Pesanan <?= $p['status_pesanan'] ?></small></p>
+                                                            <p class="card-text"><small class="text-muted">Tanggal Pesan <?= $p['tanggal_pesan'] ?> Status Pesanan <?= strtoupper(($p['status_pesanan'] == 'jeruji') ? 'Pembuatan Jeruji' : ($p['status_pesanan'] == 'rangka') ? 'Pembuatan Rangka' : $p['status_pesanan']) ?></small></p>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -122,7 +122,8 @@ if ($_SESSION['nama_pelanggan'] !== null) {
                         <td class="text-center"><?= $p['tanggal_pesan'] ?></td>
                         <td class="text-center">
                           <h5>
-                            <span class="badge badge-lg rounded-pill bg-secondary text-light"><?= $p['status_pesanan'] ?></span>
+                            <span class="badge badge-lg rounded-pill bg-secondary text-light">
+                              <?= strtoupper(($p['status_pesanan'] == 'jeruji') ? 'Pembuatan Jeruji' : ($p['status_pesanan'] == 'rangka') ? 'Pembuatan Rangka' : $p['status_pesanan']) ?></span>
                           </h5>
                         </td>
                       </tr>

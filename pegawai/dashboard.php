@@ -151,7 +151,11 @@ if ($_SESSION['nama_petugas'] !== null) {
                                                             <td>
                                                                 <?= $datapesananproses[$i]['kode_transaksi'] ?>
                                                             </td>
-                                                            <td><a class="btn btn-info" href="?proses=<?= $datapesananproses[$i]['id_pesanan'] ?>&kode=<?= $datapesananproses[$i]['kode_transaksi']; ?>"><?= strtoupper($datapesananproses[$i]['status_pesanan']) ?></a></td>
+                                                            <td>
+                                                                <a class="btn btn-info" href="?proses=<?= $datapesananproses[$i]['id_pesanan'] ?>&kode=<?= $datapesananproses[$i]['kode_transaksi']; ?>">
+                                                                    <?= strtoupper(($datapesananproses[$i]['status_pesanan'] == 'jeruji') ? 'Pembuatan Jeruji' : ($datapesananproses[$i]['status_pesanan'] == 'rangka') ? 'Pembuatan Rangka' : $datapesananproses[$i]['status_pesanan']) ?>
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     <?php } ?>
                                                 <?php else : ?>
@@ -258,7 +262,7 @@ if ($_SESSION['nama_petugas'] !== null) {
                                         <a class="form-control btn-secondary text-center text-decoration-none" target="blank" href="../cetak.php?id=<?= $d['id_pelanggan'] ?>&kode=<?= $d['kode_transaksi'] ?>">Cetak</a>
                                     </div>
                                     <div class="col-6 m-2">
-                                        <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>">Hubungi Pelanggan</a>
+                                        <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/62<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan</a>
                                     </div>
                                 </div>
                             <?php } elseif ($datadetailpesanan[0]['status_pesanan'] == 'siapkirim') { ?>
@@ -268,7 +272,7 @@ if ($_SESSION['nama_petugas'] !== null) {
                                     </div>
                                     <div class="col-4 m-2">
                                         <?php $textpesan = "Bpk/Ibu " . $datadetailpesanan[0]['nama_pelanggan'] . " Pesanana Anda Sudah Siap Dikirim Mohon Untuk Melakukan Pembayaran . \n Tertanda\n Admin"; ?>
-                                        <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan Siap Kirim</a>
+                                        <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/62<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan Siap Kirim</a>
                                     </div>
                                 </div>
                                 <div class="col-12 m-2">
@@ -303,7 +307,7 @@ if ($_SESSION['nama_petugas'] !== null) {
                                     <?php } ?>
                                     <div class="col-4 m-2">
                                         <?php $textpesan = "Bpk/Ibu " . $datadetailpesanan[0]['nama_pelanggan'] . " Pesanana Anda Sudah Mulai Kami Proses. \n Tertanda\n Admin"; ?>
-                                        <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan</a>
+                                        <a class="form-control btn-success text-center text-decoration-none" target="blank" href="https://wa.me/62<?= $d['nomer_pelanggan'] ?>?text=<?= $textpesan ?>">Hubungi Pelanggan</a>
                                     </div>
                                 </div>
                             <?php } ?>
