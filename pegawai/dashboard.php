@@ -17,6 +17,8 @@ if ($_SESSION['nama_petugas'] !== null) {
         $kodetransaksi = $_GET['kode'];
         $update = $_GET['update'];
         $queryupdate = "UPDATE pesanan SET status_pesanan = '$update' WHERE kode_transaksi = '$kodetransaksi'";
+        var_dump($queryupdate);
+        die();
         mysqli_query($conn, $queryupdate);
         header("location:dashboard.php?pesan=berhasil");
     }
@@ -153,7 +155,14 @@ if ($_SESSION['nama_petugas'] !== null) {
                                                             </td>
                                                             <td>
                                                                 <a class="btn btn-info" href="?proses=<?= $datapesananproses[$i]['id_pesanan'] ?>&kode=<?= $datapesananproses[$i]['kode_transaksi']; ?>">
-                                                                    <?= strtoupper(($datapesananproses[$i]['status_pesanan'] == 'jeruji') ? 'Pembuatan Jeruji' : ($datapesananproses[$i]['status_pesanan'] == 'rangka') ? 'Pembuatan Rangka' : $datapesananproses[$i]['status_pesanan']) ?>
+                                                                    <?php if ($datapesananproses[$i]['status_pesanan'] == 'jeruji') {
+                                                                        echo "Pembuatan Jejuri";
+                                                                    } elseif ($datapesananproses[$i]['status_pesanan'] == 'rangka') {
+                                                                        echo "Pembuatan Rangka";
+                                                                    } else {
+                                                                        echo $datapesananproses[$i]['status_pesanan'];
+                                                                    }
+                                                                    ?>
                                                                 </a>
                                                             </td>
                                                         </tr>

@@ -64,17 +64,6 @@ if (isset($_POST['cari'])) {
         $print = "yes";
         $datapesanan = mysqli_fetch_all($execfilter, MYSQLI_ASSOC);
         $datadetail = mysqli_fetch_all($execdetail, MYSQLI_ASSOC);
-        $querydetailpesanan = "SELECT * FROM pesanan JOIN detail_pesanan ON detail_pesanan.kode_transaksi = pesanan.kode_transaksi JOIN kandang ON kandang.id_kandang = detail_pesanan.id_kandang WHERE detail_pesanan.checkout = 1";
-        $execdetailpesanan = mysqli_query($conn, $querydetailpesanan);
-        $datadetailpesanan = mysqli_fetch_all($execdetailpesanan, MYSQLI_ASSOC);
-        foreach ($datadetailpesanan as $data) {
-            $pendapatanan = 0;
-            $pendapatantotal[] = $pendapatanan += $data['jumlah_barang'] * $data['harga_kandang'];
-            $pendapattotal = 0;
-            foreach ($pendapatantotal as $total) {
-                $pendapattotal += $total;
-            }
-        }
     }
     // var_dump($datapesanan);
     // var_dump($datadetail);
@@ -212,7 +201,16 @@ if (isset($_POST['cari'])) {
                                                             <?php }
                                                             } ?>
                                                         </td>
-                                                        <td class="col"><?= strtoupper(($datapesanan[$i]['status_pesanan'] == 'jeruji') ? 'Pembuatan Jeruji' : ($datapesanan[$i]['status_pesanan'] == 'rangka') ? 'Pembuatan Rangka' : $datapesanan[$i]['status_pesanan']) ?></td>
+                                                        <td class="col">
+                                                            <?php if ($datapesananproses[$i]['status_pesanan'] == 'jeruji') {
+                                                                echo "Pembuatan Jejuri";
+                                                            } elseif ($datapesananproses[$i]['status_pesanan'] == 'rangka') {
+                                                                echo "Pembuatan Rangka";
+                                                            } else {
+                                                                echo $datapesananproses[$i]['status_pesanan'];
+                                                            }
+                                                            ?>
+                                                        </td>
                                                         <td class="col">
                                                             <?php foreach ($datadetail as $key) {
                                                                 if ($datapesanan[$i]['kode_transaksi'] == $key['kode_transaksi']) {
