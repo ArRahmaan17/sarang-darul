@@ -146,14 +146,7 @@ if ($_SESSION['nama_pelanggan'] !== null) {
                                                         <div class="card-body">
                                                             <h5 class="card-title">Pesanan Kandang <?= $p['nama_kandang'] ?></h5>
                                                             <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                                            <p class="card-text"><small class="text-muted">Tanggal Pesan <?= $p['tanggal_pesan'] ?> Status Pesanan <?php if ($datapesananproses[$i]['status_pesanan'] == 'jeruji') {
-                                                                                                                                                                        echo "Pembuatan Jejuri";
-                                                                                                                                                                    } elseif ($datapesananproses[$i]['status_pesanan'] == 'rangka') {
-                                                                                                                                                                        echo "Pembuatan Rangka";
-                                                                                                                                                                    } else {
-                                                                                                                                                                        echo $datapesananproses[$i]['status_pesanan'];
-                                                                                                                                                                    }
-                                                                                                                                                                    ?></small></p>
+                                                            <p class="card-text"><small class="text-muted">Tanggal Pesan <?= $p['tanggal_pesan'] ?> Status Pesanan <?php echo ($p['status_pesanan']) ?></small></p>
                                                         </div>
                                                     </div>
                                                 </div>

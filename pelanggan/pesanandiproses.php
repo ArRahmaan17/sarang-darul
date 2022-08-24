@@ -121,10 +121,16 @@ if ($_SESSION['nama_pelanggan'] !== null) {
                         <td class="text-center"><a class="text-decoration-none text-dark" href="?detailpesanan=<?= $p['kode_transaksi'] ?>"><?= $p['kode_transaksi'] ?></a></td>
                         <td class="text-center"><?= $p['tanggal_pesan'] ?></td>
                         <td class="text-center">
-                          <h5>
-                            <span class="badge badge-lg rounded-pill bg-secondary text-light">
-                              <?= strtoupper(($p['status_pesanan'] == 'jeruji') ? 'Pembuatan Jeruji' : ($p['status_pesanan'] == 'rangka') ? 'Pembuatan Rangka' : $p['status_pesanan']) ?></span>
-                          </h5>
+                          <a class="btn btn-info" href="?proses=<?= $p['id_pesanan'] ?>&kode=<?= $p['kode_transaksi']; ?>">
+                            <?php if ($p['status_pesanan'] == 'jeruji') {
+                              echo "Pembuatan Jejuri";
+                            } elseif ($p['status_pesanan'] == 'rangka') {
+                              echo "Pembuatan Rangka";
+                            } else {
+                              echo $p['status_pesanan'];
+                            }
+                            ?>
+                          </a>
                         </td>
                       </tr>
                     <?php endforeach ?>

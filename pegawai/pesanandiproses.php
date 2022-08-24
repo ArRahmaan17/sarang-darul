@@ -112,10 +112,16 @@ if ($_SESSION['nama_petugas'] !== null) {
                         </td>
                         <td class="text-center"><a class="text-decoration-none text-dark" href="?detailpesanan=<?= $datapesanan[$i]['kode_transaksi'] ?>"><?= $datapesanan[$i]['kode_transaksi'] ?></a></td>
                         <td class="text-center">
-                          <h5>
-                            <span class="badge badge-lg rounded-pill bg-secondary text-light">
-                              <?= strtoupper(($datapesanan[$i]['status_pesanan'] == 'jeruji') ? 'Pembuatan Jeruji' : ($datapesanan[$i]['status_pesanan'] == 'rangka') ? 'Pembuatan Rangka' : $datapesanan[$i]['status_pesanan']) ?></span>
-                          </h5>
+                          <a class="btn btn-info" href="?proses=<?= $datapesanan[$i]['id_pesanan'] ?>&kode=<?= $datapesanan[$i]['kode_transaksi']; ?>">
+                            <?php if ($datapesanan[$i]['status_pesanan'] == 'jeruji') {
+                              echo "Pembuatan Jejuri";
+                            } elseif ($datapesanan[$i]['status_pesanan'] == 'rangka') {
+                              echo "Pembuatan Rangka";
+                            } else {
+                              echo $datapesanan[$i]['status_pesanan'];
+                            }
+                            ?>
+                          </a>
                         </td>
                       </tr>
                     <?php } ?>

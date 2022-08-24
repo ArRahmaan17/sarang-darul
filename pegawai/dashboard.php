@@ -17,8 +17,8 @@ if ($_SESSION['nama_petugas'] !== null) {
         $kodetransaksi = $_GET['kode'];
         $update = $_GET['update'];
         $queryupdate = "UPDATE pesanan SET status_pesanan = '$update' WHERE kode_transaksi = '$kodetransaksi'";
-        var_dump($queryupdate);
-        die();
+        // var_dump($queryupdate);
+        // die();
         mysqli_query($conn, $queryupdate);
         header("location:dashboard.php?pesan=berhasil");
     }

@@ -84,8 +84,6 @@ if (isset($_POST['update'])) {
   $nomer = $_POST['nomer'];
   $alamat = $_POST['alamat'];
   $query = "UPDATE $tabel SET nama_$tabel = '$name', nomer_$tabel = $nomer, username = '$username', password = '$password', alamat_$tabel = '$alamat' WHERE id_$tabel = $id";
-  echo $query;
-  die();
   $exec = mysqli_query($conn, $query);
   if ($exec) {
     $_SESSION['nama_pelanggan'] = $name;

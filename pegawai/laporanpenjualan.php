@@ -202,12 +202,12 @@ if (isset($_POST['cari'])) {
                                                             } ?>
                                                         </td>
                                                         <td class="col">
-                                                            <?php if ($datapesananproses[$i]['status_pesanan'] == 'jeruji') {
+                                                            <?php if ($datapesanan[$i]['status_pesanan'] == 'jeruji') {
                                                                 echo "Pembuatan Jejuri";
-                                                            } elseif ($datapesananproses[$i]['status_pesanan'] == 'rangka') {
+                                                            } elseif ($datapesanan[$i]['status_pesanan'] == 'rangka') {
                                                                 echo "Pembuatan Rangka";
                                                             } else {
-                                                                echo $datapesananproses[$i]['status_pesanan'];
+                                                                echo $datapesanan[$i]['status_pesanan'];
                                                             }
                                                             ?>
                                                         </td>
