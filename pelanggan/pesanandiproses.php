@@ -156,7 +156,11 @@ if ($_SESSION['nama_pelanggan'] !== null) {
                     </div>
                   </div>
                   <div class="col-md-4 mt-4">
-                    <img height="150px" alt="Foto Kandang" src="../assets/img/foto-kandang/<?= $d['foto_kandang'] ?>">
+                    <?php if ($d["foto_" . $d['status_pesanan']] != null) : ?>
+                      <img height="150px" alt="Foto Proses" src="../assets/img/foto-pembayaran/<?= $d["foto_" . $d['status_pesanan']] ?>">
+                    <?php else : ?>
+                      <img height="150px" alt="Foto Kandang" src="../assets/img/foto-kandang/<?= $d['foto_kandang'] ?>">
+                    <?php endif ?>
                   </div>
                 <?php endforeach ?>
                 <div class="col-12 my-4">

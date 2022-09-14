@@ -12,6 +12,7 @@ if ($_SESSION['nama_petugas'] !== null) {
         $querydetail = "SELECT * FROM pesanan JOIN detail_pesanan ON pesanan.kode_transaksi = detail_pesanan.kode_transaksi JOIN pelanggan ON pelanggan.id_pelanggan = pesanan.id_pelanggan JOIN kandang ON detail_pesanan.id_kandang = kandang.id_kandang WHERE pesanan.kode_transaksi = '$kodetransaksi'";
         $execdetailpesanan = mysqli_query($conn, $querydetail);
         $datadetailpesanan = mysqli_fetch_all($execdetailpesanan, MYSQLI_ASSOC);
+        $statusPesanan = $datadetailpesanan[0]['status_pesanan'];
     }
     if (isset($_GET['update'])) {
         $kodetransaksi = $_GET['kode'];
@@ -48,6 +49,18 @@ if ($_SESSION['nama_petugas'] !== null) {
         $pesan = "<td colspan='6' class='text-center'>Tidak Ada Data</td>";
     } else {
         $pesan = "<td colspan='6' class='text-center'>Belum Ada Pesanan Selesai Nih</td>";
+    }
+    if (isset($_POST['kirim'])) {
+        var_dump(time());
+        die();
+        $status = $_POST['status'];
+        $foto_update = date('Y-m-d') . "-" . $status . "-" . $_FILES['foto-update']['name'];
+        $kodeTransaksi = $_POST['kode-transaksi'];
+        $sqlUpdatePesanan = "UPDATE pesanan SET foto_$status = '$foto_update' WHERE kode_transaksi = '$kodeTransaksi'";
+        $execUpdatePesanan = mysqli_query($conn, $sqlUpdatePesanan);
+        if ($execUpdatePesanan) {
+            move_uploaded_file($_FILES['foto-update']['tmp_name'], "../assets/img/foto-pembayaran/" . $foto_update);
+        }
     }
 }
 
@@ -115,15 +128,19 @@ if ($_SESSION['nama_petugas'] !== null) {
                     <?php if (isset($_GET['pesan'])) : ?>
                         <?php if ($_GET['pesan'] === "berhasil") : ?>
                             <div class="alert alert-success m-4" role="alert">
-                                Berhasil
+                                <?= $_GET['pesan'] ?>
                             </div>
                         <?php elseif ($_GET['pesan'] === "gagal") : ?>
                             <div class="alert alert-danger m-4" role="alert">
-                                Gagal
+                                <?= $_GET['pesan'] ?>
                             </div>
                         <?php elseif ($_GET['pesan'] === "nothing") : ?>
                             <div class="alert alert-danger m-4" role="alert">
                                 Account Admin Belum Di Miliki
+                            </div>
+                        <?php elseif ($_GET['gagal']) : ?>
+                            <div class="alert alert-danger m-4" role="alert">
+                                <?= $_GET['gagal'] ?>
                             </div>
                         <?php endif ?>
                     <?php endif ?>
@@ -288,6 +305,20 @@ if ($_SESSION['nama_petugas'] !== null) {
                                     <a class="form-control btn-secondary text-center text-decoration-none" target="blank" href="../cetak.php?id=<?= $d['id_pelanggan'] ?>&kode=<?= $d['kode_transaksi'] ?>">Cetak</a>
                                 </div>
                             <?php } else { ?>
+                                <?php if ($datadetailpesanan[0]["foto_" . $statusPesanan] == null) : ?>
+                                    <div class="col-12 mt-5">
+                                        <h4>Masukan Foto <?= $datadetailpesanan[0]['status_pesanan'] ?></h4>
+                                        <form action="proses.php" method="post" enctype="multipart/form-data">
+                                            <div class="mb-3">
+                                                <label for="formFile" class="form-label">Foto <?= $datadetailpesanan[0]['status_pesanan'] ?></label>
+                                                <input class="form-control" type="file" name="foto-update" id="foto-update">
+                                                <input type="hidden" name="kode-transaksi" value="<?= $datadetailpesanan[0]['kode_transaksi'] ?>">
+                                                <input type="hidden" name="status" value="<?= $datadetailpesanan[0]['status_pesanan'] ?>">
+                                            </div>
+                                            <input class="btn btn-danger form-control" type="submit" value="Kirim" name="kirim">
+                                        </form>
+                                    </div>
+                                <?php endif ?>
                                 <div class="d-flex justify-content-center mt-5">
                                     <?php if ($datadetailpesanan[0]['status_pesanan'] == 'proses') { ?>
                                         <div class="col-4 m-2">

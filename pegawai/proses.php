@@ -2,7 +2,6 @@
 session_start();
 include '../conn.php';
 if (isset($_POST['checkout'])) {
-  var_dump($_POST);
   $id_pelanggan = $_POST['id-pelanggan'];
   $kodetransaksi = $_POST['kodetransaksi'];
   $date = date("Y-m-d");
@@ -15,6 +14,7 @@ if (isset($_POST['checkout'])) {
     header("location:dashboard.php?pesan=gagal");
   }
 }
+
 if (isset($_POST['tambah'])) {
   $nama = $_POST['nama-kandang'];
   $ukurankandang = $_POST['ukuran-kandang'];
@@ -83,7 +83,7 @@ if (isset($_POST['update'])) {
   $username = $_POST['username'];
   $nomer = $_POST['nomer'];
   $alamat = $_POST['alamat'];
-  $query = "UPDATE $tabel SET nama_$tabel = '$name', nomer_$tabel = $nomer, username = '$username', password = '$password', alamat_$tabel = '$alamat' WHERE id_$tabel = $id";
+  $query = "UPDATE $tabel SET nama_$tabel = '$name', nomer_$tabel = $nomer, username = '$username', alamat_$tabel = '$alamat' WHERE id_$tabel = $id";
   $exec = mysqli_query($conn, $query);
   if ($exec) {
     $_SESSION['nama_pelanggan'] = $name;
